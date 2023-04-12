@@ -1,14 +1,11 @@
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class MyArrayList<T> implements List<T> {
     private Object[] array = new Object[10]; // contains objects of list
     private int size = 0; // current size of ArrayList
 
     @Override
-    public int size() { // returned size of ArrayList
+    public int size() { // return size of ArrayList
         return size;
     }
 
@@ -30,29 +27,44 @@ public class MyArrayList<T> implements List<T> {
         return new MyIterator<T>();
     }
 
-    class MyIterator<T> implements Iterator<T>{
+    class MyIterator<T> implements Iterator<T>{ // class used for iterating in ArrayList
 
-        private int cursor = 0;
+        private int cursor = 0; // pointer to the current object
         @Override
-        public boolean hasNext() {
-            return cursor != size();
+        public boolean hasNext() { // check is ArrayList has next element after cursor
+            return cursor < size();
         }
 
         @Override
-        public T next() {
+        public T next() { // getting next element after cursor
             return get(cursor++);
         }
     }
 
 
     @Override
-    public Object[] toArray() {
-        return new Object[0];
+    public Object[] toArray() { // returns array from ArrayList
+        Object[] temp = new Object[size()];
+        for (int i = 0; i < size; i ++){
+            temp[i] = array[i];
+        }
+        return temp;
     }
 
     @Override
-    public boolean add(Object o) {
-        return false;
+    public boolean add(Object o) { // adding new element to ArrayList
+        if (size() == array.length) increaseArray();
+        array[size] = o;
+        size++;
+        return true;
+    }
+
+    private void increaseArray(){ // increasing size of array attribute to double size
+        Object[] temp = new Object[size * 2];
+        for (int i = 0; i < size; i++){
+            temp[i] = array[i];
+        }
+        array = temp;
     }
 
     @Override
