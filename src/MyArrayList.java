@@ -39,6 +39,11 @@ public class MyArrayList<T> implements List<T> {
         public T next() { // getting next element after cursor
             return get(cursor++);
         }
+
+        @Override
+        public void remove() { // remove element at cursor
+            MyArrayList.this.remove(cursor);
+        }
     }
 
 
@@ -68,18 +73,28 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(Object o) { // remove one element from ArrayList
+        MyIterator<T> iterator = new MyIterator<>();
+        while (iterator.hasNext()){
+            if (iterator.next().equals(o)){
+                iterator.remove();
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public boolean addAll(Collection c) {
-        return false;
+        return addAll(size(), c);
     }
 
     @Override
     public boolean addAll(int index, Collection c) {
-        return false;
+        for (Object element: c){
+            add(index++, element);
+        }
+        return true;
     }
 
     @Override
