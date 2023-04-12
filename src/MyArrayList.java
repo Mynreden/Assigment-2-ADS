@@ -85,12 +85,12 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean addAll(Collection c) {
+    public boolean addAll(Collection c) { // add elements from collection to ArrayList
         return addAll(size(), c);
     }
 
     @Override
-    public boolean addAll(int index, Collection c) {
+    public boolean addAll(int index, Collection c) { // add elements from collection to ArrayList at specific index
         for (Object element: c){
             add(index++, element);
         }
@@ -98,18 +98,22 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public void clear() {
-
+    public void clear() { // clear ArrayList: deleted all elements and size become equal zero
+        size = 0;
+        array = new Object[10];
     }
 
     @Override
-    public Object get(int index) {
-        return null;
+    public T get(int index) { // get element in specific index
+        if (index >= size) throw new IndexOutOfBoundsException();
+        return (T) array[index];
     }
 
     @Override
-    public Object set(int index, Object element) {
-        return null;
+    public Object set(int index, Object element) { // set element at specific index
+        if (index >= size) throw new IndexOutOfBoundsException();
+        array[index] = element;
+        return element;
     }
 
     @Override
