@@ -14,21 +14,36 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean isEmpty() { // check if ArrayList is empty
-        return size == 0;
+        return size() == 0;
     }
 
     @Override
     public boolean contains(Object o) { // check is ArrayList contain object
         for (int i = 0;i < size; i ++){
             if (array[i] == o) return true;
-        };
+        }
         return false;
     }
 
     @Override
     public Iterator iterator() {
-        return null;
+        return new MyIterator<T>();
     }
+
+    class MyIterator<T> implements Iterator<T>{
+
+        private int cursor = 0;
+        @Override
+        public boolean hasNext() {
+            return cursor != size();
+        }
+
+        @Override
+        public T next() {
+            return get(cursor++);
+        }
+    }
+
 
     @Override
     public Object[] toArray() {
