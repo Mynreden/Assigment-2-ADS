@@ -3,20 +3,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class MyArrayList<T> implements List
-{
+public class MyArrayList<T> implements List<T> {
+    private Object[] array = new Object[10]; // contains objects of list
+    private int size = 0; // current size of ArrayList
+
     @Override
-    public int size() {
-        return 0;
+    public int size() { // returned size of ArrayList
+        return size;
     }
 
     @Override
-    public boolean isEmpty() {
-        return false;
+    public boolean isEmpty() { // check if ArrayList is empty
+        return size == 0;
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(Object o) { // check is ArrayList contain object
+        for (int i = 0;i < size; i ++){
+            if (array[i] == o) return true;
+        };
         return false;
     }
 
