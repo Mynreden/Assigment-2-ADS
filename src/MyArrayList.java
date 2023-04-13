@@ -37,12 +37,13 @@ public class MyArrayList<T> implements List<T> {
 
         @Override
         public T next() { // getting next element after cursor
-            return get(cursor++);
+            return (T) get(cursor++);
         }
 
         @Override
         public void remove() { // remove element at cursor
             MyArrayList.this.remove(cursor);
+
         }
     }
 
@@ -90,10 +91,11 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean addAll(int index, Collection c) { // add elements from collection to ArrayList at specific index
+    public boolean addAll(int index, Collection<? extends T> c) { // add elements from collection to ArrayList at specific index
         for (Object element: c){
             add(index++, element);
         }
+        size += c.size();
         return true;
     }
 
@@ -117,18 +119,31 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public void add(int index, Object element) {
-
+    public void add(int index, Object element) { // adding element at specific index
+        if (size == array.length) increaseArray();
+        for (int i = index; i < size; i ++){
+            array[i + 1] = array[i];
+        }
+        array[index] = element;
+        size ++;
     }
 
     @Override
-    public Object remove(int index) {
-        return null;
+    public T remove(int index) { // remove element by it index
+        T temp = get(index);
+        for (int i = index; i < size; i ++){
+            array[i] = array[i + 1];
+        }
+        size --;
+        return temp;
     }
 
     @Override
-    public int indexOf(Object o) {
-        return 0;
+    public int indexOf(Object o) { // find index of object, if object does not exist in array return -1
+        for (int i = 0; i < size; i ++){
+            if (array[i].equals(o)) return i;
+        }
+        return -1;
     }
 
     @Override
