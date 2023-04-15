@@ -1,33 +1,29 @@
 import java.util.*;
 
-public class MyArrayList<T> implements List<T> {
+public class MyArrayList<T extends Comparable> implements MyList<T>, Iterable<T>{
     private Object[] array = new Object[10]; // contains objects of list
     private int size = 0; // current size of ArrayList
 
-    @Override
     public int size() { // return size of ArrayList
         return size;
     }
 
-    @Override
     public boolean isEmpty() { // check if ArrayList is empty
         return size() == 0;
     }
 
-    @Override
     public boolean contains(Object o) { // check is ArrayList contain object
-        for (int i = 0;i < size; i ++){
-            if (array[i] == o) return true;
+        for (int i = 0; i < size; i ++){
+            if (array[i].equals(o)) return true;
         }
         return false;
     }
 
-    @Override
-    public Iterator iterator() {
-        return new MyIterator<T>();
+    public Iterator<T> iterator() {
+        return new MyIterator<>();
     }
 
-    class MyIterator<T> implements Iterator<T>{ // class used for iterating in ArrayList
+    private class MyIterator<E> implements Iterator<E>{ // class used for iterating in ArrayList
 
         private int cursor = 0; // pointer to the current object
         @Override
@@ -36,19 +32,29 @@ public class MyArrayList<T> implements List<T> {
         }
 
         @Override
-        public T next() { // getting next element after cursor
-            return (T) get(cursor++);
+        public E next() { // getting next element after cursor
+            return (E) get(cursor++);
+        }
+
+        public boolean hasPrevious() { // check is ArrayList has next element after cursor
+            return hasNext();
+        }
+
+        public E previous() { // getting next element after cursor
+            cursor++;
+            return (E) get(size - cursor);
         }
 
         @Override
         public void remove() { // remove element at cursor
-            MyArrayList.this.remove(cursor);
+            MyArrayList.this.remove(cursor - 1);
+        }
 
+        public int getCursor(){
+            return cursor - 1;
         }
     }
 
-
-    @Override
     public Object[] toArray() { // returns array from ArrayList
         Object[] temp = new Object[size()];
         for (int i = 0; i < size; i ++){
@@ -57,12 +63,20 @@ public class MyArrayList<T> implements List<T> {
         return temp;
     }
 
-    @Override
-    public boolean add(Object o) { // adding new element to ArrayList
+    public void add(T o) { // adding new element to ArrayList
         if (size() == array.length) increaseArray();
         array[size] = o;
         size++;
-        return true;
+    }
+
+    @Override
+    public void add(T item, int index) { // adding new element to ArrayList at specific index
+        if (size() == array.length) increaseArray();
+        for (int i = size; i >index; i --){
+            array[i] = array[i - 1];
+        }
+        array[index] = item;
+        size++;
     }
 
     private void increaseArray(){ // increasing size of array attribute to double size
@@ -73,8 +87,7 @@ public class MyArrayList<T> implements List<T> {
         array = temp;
     }
 
-    @Override
-    public boolean remove(Object o) { // remove one element from ArrayList
+    public boolean remove(T o) { // remove one element from ArrayList
         MyIterator<T> iterator = new MyIterator<>();
         while (iterator.hasNext()){
             if (iterator.next().equals(o)){
@@ -85,104 +98,89 @@ public class MyArrayList<T> implements List<T> {
         return false;
     }
 
-    @Override
-    public boolean addAll(Collection c) { // add elements from collection to ArrayList
-        return addAll(size(), c);
-    }
-
-    @Override
     public boolean addAll(int index, Collection<? extends T> c) { // add elements from collection to ArrayList at specific index
-        for (Object element: c){
-            add(index++, element);
+        for (T element: c){
+            add(element, index++);
         }
         size += c.size();
         return true;
     }
 
-    @Override
-    public void clear() { // clear ArrayList: deleted all elements and size become equal zero
+    public void clear() { // clear ArrayList: deletes all elements and size become equal zero
         size = 0;
         array = new Object[10];
     }
 
-    @Override
     public T get(int index) { // get element in specific index
         if (index >= size) throw new IndexOutOfBoundsException();
         return (T) array[index];
     }
 
-    @Override
     public Object set(int index, Object element) { // set element at specific index
         if (index >= size) throw new IndexOutOfBoundsException();
         array[index] = element;
         return element;
     }
 
-    @Override
-    public void add(int index, Object element) { // adding element at specific index
-        if (size == array.length) increaseArray();
-        for (int i = index; i < size; i ++){
-            array[i + 1] = array[i];
-        }
-        array[index] = element;
-        size ++;
-    }
-
-    @Override
     public T remove(int index) { // remove element by it index
         T temp = get(index);
-        for (int i = index; i < size; i ++){
+        for (int i = index; i < size - 1; i++){
             array[i] = array[i + 1];
         }
         size --;
+        array[size] = null;
         return temp;
     }
 
-    @Override
     public int indexOf(Object o) { // find index of object, if object does not exist in array return -1
-        for (int i = 0; i < size; i ++){
-            if (array[i].equals(o)) return i;
+        MyIterator<T> iterator = new MyIterator<>();
+        while (iterator.hasNext()){
+            if (iterator.next().equals(o)) return iterator.getCursor();
+        }
+        return -1;
+    }
+
+    public int lastIndexOf(Object o) { // return index
+        MyIterator<T> iterator = new MyIterator<>();
+        while (iterator.hasPrevious()){
+            if (iterator.previous().equals(o)) return iterator.getCursor();
         }
         return -1;
     }
 
     @Override
-    public int lastIndexOf(Object o) {
-        return 0;
+    public void sort() {
+        mergeSort(array, 0, size() - 1);
+    }
+
+    private void mergeSort(Object[] arr, int left, int right){
+        if (left >= right) return;
+        int less = Partition(arr, left, right);
+        mergeSort(arr, left, less - 1);
+        mergeSort(arr, less + 1, right);
+    }
+
+    private int Partition(Object[] arr, int left, int right) {
+        T opora = get(right);
+        int less = left;
+
+        for (int i = less; i < right; i ++){
+            if (get(i).compareTo(opora) < 1){
+                Object temp = arr[i];
+                arr[i] = arr[less];
+                arr[less] = temp;
+                less ++;
+            }
+        }
+        Object temp = arr[right];
+        arr[right] = arr[less];
+        arr[less] = temp;
+        return less;
     }
 
     @Override
-    public ListIterator listIterator() {
-        return null;
-    }
-
-    @Override
-    public ListIterator listIterator(int index) {
-        return null;
-    }
-
-    @Override
-    public List subList(int fromIndex, int toIndex) {
-        return null;
-    }
-
-    @Override
-    public boolean retainAll(Collection c) {
-        return false;
-    }
-
-    @Override
-    public boolean removeAll(Collection c) {
-        return false;
-    }
-
-    @Override
-    public boolean containsAll(Collection c) {
-        return false;
-    }
-
-    @Override
-    public Object[] toArray(Object[] a) {
-        return new Object[0];
+    public String toString() {
+        Object[] arr = toArray();
+        return Arrays.toString(arr);
     }
 }
