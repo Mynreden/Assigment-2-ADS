@@ -1,9 +1,23 @@
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        testArrayList();
+        //testArrayList();
+        testLinkedList();
+    }
 
+    private static void testLinkedList(){
+        MyLinkedList<Integer> linkedList = new MyLinkedList<>();
+        linkedList.add(8);
+        linkedList.add(77);
+        linkedList.add(56);
+        linkedList.add(3);
+        linkedList.add(9);
+
+        for (Integer i : linkedList){
+            System.out.println(i);
+        }
     }
 
     private static void testArrayList(){
@@ -30,7 +44,8 @@ public class Main {
         arrayList.remove(4); // remove element with index 4
         System.out.println("\nAfter removing fifth element: " + arrayList);
 
-        arrayList.remove(new Integer(55)); // remove element Integer(55)
+        Integer a = 55;
+        arrayList.remove(a); // remove element Integer(55)
         System.out.println("After removing element '55': " + arrayList);
 
         System.out.println("Index of element '8': " + arrayList.indexOf(8)); // find index of element Integer(8)

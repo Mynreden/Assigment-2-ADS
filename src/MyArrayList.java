@@ -71,6 +71,7 @@ public class MyArrayList<T extends Comparable> implements MyList<T>, Iterable<T>
 
     @Override
     public void add(T item, int index) { // adding new element to ArrayList at specific index
+        if (index > size) throw new IndexOutOfBoundsException();
         if (size() == array.length) increaseArray();
         for (int i = size; i >index; i --){
             array[i] = array[i - 1];
@@ -150,14 +151,14 @@ public class MyArrayList<T extends Comparable> implements MyList<T>, Iterable<T>
 
     @Override
     public void sort() {
-        mergeSort(array, 0, size() - 1);
+        quickSort(array, 0, size() - 1);
     }
 
-    private void mergeSort(Object[] arr, int left, int right){
+    private void quickSort(Object[] arr, int left, int right){
         if (left >= right) return;
         int less = Partition(arr, left, right);
-        mergeSort(arr, left, less - 1);
-        mergeSort(arr, less + 1, right);
+        quickSort(arr, left, less - 1);
+        quickSort(arr, less + 1, right);
     }
 
     private int Partition(Object[] arr, int left, int right) {
