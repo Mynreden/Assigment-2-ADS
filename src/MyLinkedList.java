@@ -224,7 +224,7 @@ public class MyLinkedList<T extends Comparable> implements MyList<T>, Iterable<T
     }
 
     private void quickSort(Node<T> left, Node<T> right){ // quicksort for linked list
-        if (indexOfNode(left) >= indexOfNode(right)) return;
+        if (left == right || left.previous == right) return;
         Node<T> less = Partition(left, right);
         quickSort(left, less.previous);
         quickSort(less.next, right);
