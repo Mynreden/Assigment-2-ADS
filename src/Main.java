@@ -9,15 +9,36 @@ public class Main {
 
     private static void testLinkedList(){
         MyLinkedList<Integer> linkedList = new MyLinkedList<>();
+        linkedList.add(22); // adding values
+        linkedList.add(1);
+        linkedList.add(18);
+        linkedList.add(2);
+        linkedList.add(75);
         linkedList.add(8);
-        linkedList.add(77);
-        linkedList.add(56);
-        linkedList.add(3);
-        linkedList.add(9);
-
-        for (Integer i : linkedList){
-            System.out.println(i);
+        linkedList.add(0);
+        linkedList.add(55);
+        linkedList.add(1);
+        linkedList.add(63);
+        System.out.println("Elements in array: " + linkedList);
+        System.out.println("Size: " + linkedList.size()); // check size
+        linkedList.add(99,4); // add by index
+        System.out.println("After adding '99' at index 4:" + linkedList);
+        System.out.println("Is LinkedList contain '55'?: " + linkedList.contains(55));
+        System.out.println("Iteration: ");
+        for (Integer a : linkedList){ // iterator check
+            System.out.printf("%s, ", a);
         }
+        linkedList.remove(4); // remove element with index 4
+        System.out.println("\nAfter removing fifth element: " + linkedList);
+
+        Integer a = 55;
+        linkedList.remove(a); // remove element Integer(55)
+        System.out.println("After removing element '55': " + linkedList);
+
+        System.out.println("Index of element '8': " + linkedList.indexOf(8)); // find index of element Integer(8)
+
+        linkedList.sort(); // sorting list
+        System.out.println("Sorted array: " + linkedList);
     }
 
     private static void testArrayList(){
